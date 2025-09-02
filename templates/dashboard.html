@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Olá, {{ user }}!</h1>
+    
+
+  <h1>🎶 Faixas Recomendadas</h1>
+  <div id="tracks">
+    <!-- As faixas serão inseridas aqui pelo JavaScript -->
+  </div>
+
+<script type="application/json" id="tracks-data">
+    {
+        "items": [
+            {% for track in tracks['items'] %}
+            {
+                "name": "{{ track.name|escape }}",
+                "artists": [{ "name": "{{ track.artists[0].name|escape }}" }],
+                "album": {
+                    "name": "{{ track.album.name|escape }}",
+                    "release_date": "{{ track.album.release_date|escape }}",
+                    "images": [{ "url": "{{ track.album.images[0].url|escape }}" }]
+                },
+                "duration_ms": {{ track.duration_ms }},
+                "popularity": {{ track.popularity }},
+                "external_urls": { "spotify": "{{ track.external_urls.spotify|escape }}" }
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+</script>
+<script>
+    const tracksData = JSON.parse(document.getElementById('tracks-data').textContent);
+    const tracksDiv = document.getElementById('tracks');
+    tracksData.items.forEach(track => {
+        const trackElem = document.createElement('div');
+        trackElem.innerHTML = `
+            <strong>${track.name}</strong> - ${track.artists[0].name}<br>
+            Álbum: ${track.album.name} (${track.album.release_date})<br>
+            <img src="${track.album.images[0].url}" alt="Album cover" style="height:50px;"><br>
+            Duração: ${(track.duration_ms/60000).toFixed(2)} min<br>
+            Popularidade: ${track.popularity}<br>
+            <a href="${track.external_urls.spotify}" target="_blank">Ouvir no Spotify</a>
+            <hr>
+        `;
+        tracksDiv.appendChild(trackElem);
+    });
+</script>
+
+</body>
+</html>
