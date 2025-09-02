@@ -20,7 +20,7 @@ def login():
 @app.route('/callback')
 def callback():
     sp_oauth = create_spotify_oauth()
-    code = request.args.get('code')  # ✅ Pegando o código da URL
+    code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
 
     if not token_info:
@@ -42,7 +42,6 @@ def dashboard():
         user = sp.current_user()
         user_name = user["display_name"]
 
-        # ✅ Use lista aqui
         tracks = sp.current_user_top_tracks(limit=10, time_range='medium_term')
 
         return render_template("dashboard.html", user=user_name, tracks=tracks)
