@@ -2,12 +2,16 @@
 <html>
 <head>
     <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style/dashboard.css">
 </head>
 <body>
-    <h1>Olá, {{ user }}!</h1>
+    <h1 id="username-title">Olá, {{ user }}!</h1>
     
 
-  <h1>🎶 Faixas Recomendadas</h1>
+  <h1 id="title">🎶 Musicas mais escutadas</h1>
+  <p id="subtitle">Aqui estão suas músicas mais escutadas no Spotify:</p>
   <div id="tracks">
     <!-- As faixas serão inseridas aqui pelo JavaScript -->
   </div>
@@ -36,14 +40,14 @@
     const tracksData = JSON.parse(document.getElementById('tracks-data').textContent);
     const tracksDiv = document.getElementById('tracks');
     tracksData.items.forEach(track => {
-        const trackElem = document.createElement('div');
+        const trackElem = document.createElement('div-tracks');
         trackElem.innerHTML = `
-            <strong>${track.name}</strong> - ${track.artists[0].name}<br>
-            Álbum: ${track.album.name} (${track.album.release_date})<br>
-            <img src="${track.album.images[0].url}" alt="Album cover" style="height:50px;"><br>
-            Duração: ${(track.duration_ms/60000).toFixed(2)} min<br>
-            Popularidade: ${track.popularity}<br>
-            <a href="${track.external_urls.spotify}" target="_blank">Ouvir no Spotify</a>
+            <img class="tracks-img" src="${track.album.images[0].url}" alt="Album cover" style="height:50px;">
+            <strong>${track.name}</strong><br>${track.artists[0].name}<br>
+            Álbum: ${track.album.name}<br>
+            Data de Lançamento: ${track.album.release_date}<br>
+            Popularidade: <meter value="${track.popularity}" min="0" low="10" optimum="50" high="90" max="100"></meter><br>
+            <a type="button" class="btn btn-success" href="${track.external_urls.spotify}" target="_blank">Ouvir no Spotify</a>
             <hr>
         `;
         tracksDiv.appendChild(trackElem);
